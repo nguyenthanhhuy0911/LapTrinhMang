@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 class Task implements Runnable {
@@ -26,7 +28,7 @@ class Task implements Runnable {
 }
 
 public class B4 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner scan = new Scanner(System.in);
         System.out.print("Nhap vao so a: ");
         int a = scan.nextInt();
@@ -60,10 +62,13 @@ public class B4 {
             }
         }
         Collections.sort(list);
+
+        FileWriter fw = new FileWriter("out.txt");
         for(int i : list){
-            System.out.println(i);
+            fw.write(String.valueOf(i)+ "\n");
         }
+        fw.close();
     }
 
-}
 
+}
