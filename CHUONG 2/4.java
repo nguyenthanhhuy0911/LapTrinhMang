@@ -1,17 +1,23 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 
 class Task implements Runnable {
-    public int n;
-    public boolean isPrimeNumber;
+    public int a, b;
+    public ArrayList<Integer> arrayList = new ArrayList<>();
 
-    public Task(Integer n) {
-        this.n = n;
+    public Task(int a, int b) {
+        this.a = a;
+        this.b = b;
     }
 
     public void run() {
-        this.isPrimeNumber = this.checkPrime(this.n);
+        for (int i = a; i < b; i++) {
+            if (checkPrime(i)) {
+                arrayList.add(i);
+            }
+        }
     }
 
     boolean checkPrime(int n) {
@@ -30,20 +36,33 @@ class Task implements Runnable {
 public class B4 {
     public static void main(String[] args) throws IOException {
         Scanner scan = new Scanner(System.in);
+        int a, b, c;
         System.out.print("Nhap vao so a: ");
-        int a = scan.nextInt();
+        a = scan.nextInt();
         System.out.print("Nhap vao so b: ");
-        int b = scan.nextInt();
+        b = scan.nextInt();
+
+        System.out.print("Nhap vao so luong: ");
+        c = scan.nextInt();
         ArrayList<Integer> list = new ArrayList<>();
         final List<Task> tasks = new ArrayList<>();
         final List<Thread> threads = new ArrayList<>();
 
-        for (int i = a; i <= b; i++) {
-            Task t = new Task(i);
-            tasks.add(t);
-
-            Thread thread = new Thread(t);
-            threads.add(thread);
+        int s = (b - a) / c; // các khoảng cho moi luồng
+        int start = a;
+        for (int i = 0; i < c; i++) {
+            if (i == c - 1) {
+                Task t = new Task(start, b + 1);
+                tasks.add(t);
+                Thread thread = new Thread(t);
+                threads.add(thread);
+            } else {
+                Task t = new Task(start, start + s);
+                tasks.add(t);
+                Thread thread = new Thread(t);
+                threads.add(thread);
+            }
+            start += s;
         }
         for (final Thread thread : threads) {
             thread.start();
@@ -56,16 +75,13 @@ public class B4 {
             }
         }
 
-        for(final Task task: tasks){
-            if (task.isPrimeNumber){
-                list.add(task.n);
-            }
+        for (final Task task : tasks) {
+            list.addAll(task.arrayList);
         }
         Collections.sort(list);
-
         FileWriter fw = new FileWriter("out.txt");
-        for(int i : list){
-            fw.write(String.valueOf(i)+ "\n");
+        for (int i : list) {
+            fw.write(String.valueOf(i) + "\n");
         }
         fw.close();
     }
