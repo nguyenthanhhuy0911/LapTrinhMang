@@ -44,6 +44,11 @@ public class B4 {
 
         System.out.print("Nhap vao so luong: ");
         c = scan.nextInt();
+
+        if (c > (b - a)) {
+            System.out.println("So luong khong hop le");
+            return;
+        }
         ArrayList<Integer> list = new ArrayList<>();
         final List<Task> tasks = new ArrayList<>();
         final List<Thread> threads = new ArrayList<>();
