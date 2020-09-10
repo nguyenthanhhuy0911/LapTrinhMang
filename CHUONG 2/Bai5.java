@@ -1,7 +1,12 @@
+package com.company;
+
+import java.lang.reflect.Array;
+
 public class Bai5 implements Runnable {
 
     int n;
-
+    int []array = new int[1000] ;
+    int dem=0;
     public Bai5(int n) {
         this.n = n;
     }
@@ -17,16 +22,23 @@ public class Bai5 implements Runnable {
         System.out.println("Cac so nguyen to nho hon 1000: ");
         for (int i = 2; i < n; i++)
             if (checkPrime(i) == true)
+            {
                 System.out.println(i);
+                array[dem]=i;
+                dem++;
+            }
+
+
     }
 
     private synchronized int sum(int n) throws InterruptedException  {
         int S=0;
-        for (int i = 2; i < n; i++) {
-            if (checkPrime(i) == true)
-                S=S+i;
+        for (int i = 0; i < dem; i++) {
+
+               S+=array[i];
         }
-        return S;
+
+return S;
     }
     @Override
     public void run() {
