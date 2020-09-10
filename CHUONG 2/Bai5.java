@@ -2,27 +2,32 @@ package com.company;
 
 import java.lang.reflect.Array;
 
-public class Bai5   implements Runnable{
+public class Bai5 {
 
-    int n;
-    int sum=0;
-    public Bai5(int n) {
-        this.n = n;
+
+    public static int sum = 0;
+
+    public static void main(String[] args) throws Exception {
+
+    nguyento nt =new nguyento();
+    nt.display(100);
+        System.out.println(" tong cac so nguyen to la: "+sum);
+
     }
 
-    private boolean checkPrime(int n){
+    public static  boolean check(int n) {
         if (n < 2) return false;
         for (int i = 2; i <= (int) Math.sqrt(n); i++)
             if (n % i == 0) return false;
         return true;
     }
-
-    private synchronized void display(int n) throws InterruptedException  {
+}
+class nguyento {
+    synchronized void display(int n) throws InterruptedException {
         System.out.println("Cac so nguyen to nho hon 1000: ");
-       luon1 l1= new luon1();
+        tong l1 = new tong();
         for (int i = 2; i < n; i++)
-            if (checkPrime(i) == true)
-            {
+            if (Bai5.check(i) == true) {
                 System.out.println(i);
                 l1.run(i);
 
@@ -31,34 +36,17 @@ public class Bai5   implements Runnable{
 
     }
 
+}
 
-
-    class luon1 extends Thread {
-        luon1() {
+class tong extends Thread {
+        tong() {
 
             start();
         }
         public  void run( int x) {
-            sum+=x;
+            Bai5.sum+=x;
 
         }
     }
-    @Override
-    public void run() {
-        try {
-            this.display(n);
-            System.out.print("Tong cac so nguyen to tu 1 den 1000 la: ");
-            System.out.println(sum);
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public static void main(String[] args) throws Exception {
-        int n = 1000;
-        Bai5 main = new Bai5(n);
-        Thread thread = new Thread(main);
-        thread.start();
-    }
-}
