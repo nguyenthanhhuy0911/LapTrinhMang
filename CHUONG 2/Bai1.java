@@ -1,4 +1,4 @@
-import java.util.Scanner;
+﻿import java.util.Scanner;
 
 public class Bai1 {
     public static int n=0;
@@ -11,7 +11,6 @@ public class Bai1 {
             soChan sc = new soChan();
             ASCII a =new ASCII();
             a.run();
-            int dem = 0;
             while (true) {
                 if(Bai1.n!=0)
                 {
@@ -50,6 +49,7 @@ class Nhap1 extends Thread {
 
                 System.out.println("Error" + e);
             }
+
             if(Bai1.n!=0) break;
         }
     }
@@ -66,8 +66,9 @@ class soLe extends Thread {
             if (Bai1.n != 0) {
                 System.out.println("Các số lẻ nhỏ hơn N là: ");
                 for (int i = 1; i < Bai1.n; i = i + 2) {
-                    System.out.println(i);
+                    System.out.println("Số lẻ: " + i + " ");
                 }
+                System.out.println();
                 break;
             } else {
                 try {
@@ -94,9 +95,10 @@ class soChan extends Thread {
                 System.out.println("Các số chẵn nhỏ hơn N là: ");
                 for (int i=0;i<Bai1.n;i=i+2)
                 {
-                    System.out.println(i);
+                    System.out.println("Số chẵn: " + i + " ");
 
                 }
+                System.out.println();
                 break;
             } else {
                 try {
@@ -121,11 +123,12 @@ class xuat_All extends Thread {
         while (1 > 0) {
             if (Bai1.n != 0) {
                 System.out.println("Các số từ 1 đến N là: ");
-                for (int i=0;i<Bai1.n;i++)
+                for (int i=1;i<=Bai1.n;i++)
                 {
-                    System.out.println(i);
+                    System.out.println("Số từ 1 tới n: " + i + " ");
 
                 }
+                System.out.println();
                 break;
             } else {
                 try {
@@ -148,8 +151,9 @@ class ASCII extends Thread {
     public void run() {
         for (char i='A';i<='Z';i++)
         {
-            System.out.println(i);
+            System.out.println("Ký tự: " + i + " ");
         }
+        System.out.println();
 
     }
 }
