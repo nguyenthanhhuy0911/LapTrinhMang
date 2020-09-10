@@ -49,7 +49,7 @@ class Nhap1 extends Thread {
 
                 System.out.println("Error" + e);
             }
-            
+
             if(Bai1.n!=0) break;
         }
     }
@@ -66,7 +66,7 @@ class soLe extends Thread {
             if (Bai1.n != 0) {
                 System.out.println("Các số lẻ nhỏ hơn N là: ");
                 for (int i = 1; i < Bai1.n; i = i + 2) {
-                    System.out.print(i + " ");
+                    System.out.println("Số lẻ: " + i + " ");
                 }
                 System.out.println();
                 break;
@@ -95,7 +95,7 @@ class soChan extends Thread {
                 System.out.println("Các số chẵn nhỏ hơn N là: ");
                 for (int i=0;i<Bai1.n;i=i+2)
                 {
-                    System.out.print(i + " ");
+                    System.out.println("Số chẵn: " + i + " ");
 
                 }
                 System.out.println();
@@ -125,7 +125,7 @@ class xuat_All extends Thread {
                 System.out.println("Các số từ 1 đến N là: ");
                 for (int i=1;i<=Bai1.n;i++)
                 {
-                    System.out.print(i + " ");
+                    System.out.println("Số từ 1 tới n: " + i + " ");
 
                 }
                 System.out.println();
@@ -151,7 +151,7 @@ class ASCII extends Thread {
     public void run() {
         for (char i='A';i<='Z';i++)
         {
-            System.out.print(i + " ");
+            System.out.println("Ký tự: " + i + " ");
         }
         System.out.println();
 
