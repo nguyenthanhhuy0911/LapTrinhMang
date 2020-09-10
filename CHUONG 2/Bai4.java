@@ -1,52 +1,94 @@
-import java.util.Scanner;
+﻿import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
-public class Bai4 implements Runnable {
+class Task implements Runnable {
+    public int a, b;
+    public ArrayList<Integer> arrayList = new ArrayList<>();
 
-    int a,b;
-
-    public void nhap() {
-        System.out.println("Nhap vao 2 so nguyen a, b");
-        Scanner scanner = new Scanner(System.in);
-
-        int a=scanner.nextInt();
-        int b=scanner.nextInt();
-
+    public Task(int a, int b) {
+        this.a = a;
+        this.b = b;
     }
 
-    private boolean  KTsoNgto(int a){
-        if (a < 2) return false;
-        int squareRoot = (int) Math.sqrt(a);
-        for (int i = 2; i <= squareRoot; i++)
-            if (a % i == 0) return false;
+    public void run() {
+        for (int i = a; i < b; i++) {
+            if (checkPrime(i)) {
+                arrayList.add(i);
+            }
+        }
+    }
+
+    boolean checkPrime(int n) {
+        if (n < 2) {
+            return false;
+        }
+        for (int i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i == 0) {
+                return false;
+            }
+        }
         return true;
     }
+}
 
-    private synchronized void HienthiSongto(int a,int b) throws InterruptedException  {
-        System.out.println("Các số nguyen to tu a den b la: ");
-        for (int i = a; i <= b; i++) {
-            if (KTsoNgto(i)==true)
-                System.out.println(i);
+public class Bai4 {
+    public static void main(String[] args) throws IOException {
+        Scanner scan = new Scanner(System.in);
+        int a, b, c;
+        System.out.print("Nhap vao so a: ");
+        a = scan.nextInt();
+        System.out.print("Nhap vao so b: ");
+        b = scan.nextInt();
+
+        System.out.print("Nhap vao so luong: ");
+        c = scan.nextInt();
+
+        if (c > (b - a)) {
+            System.out.println("So luong khong hop le");
+            return;
+        }
+        ArrayList<Integer> list = new ArrayList<>();
+        final List<Task> tasks = new ArrayList<>();
+        final List<Thread> threads = new ArrayList<>();
+
+        int s = (b - a) / c; // các khoảng cho moi luồng
+        int start = a;
+        for (int i = 0; i < c; i++) {
+            if (i == c - 1) {
+                Task t = new Task(start, b + 1);
+                tasks.add(t);
+                Thread thread = new Thread(t);
+                threads.add(thread);
+            } else {
+                Task t = new Task(start, start + s);
+                tasks.add(t);
+                Thread thread = new Thread(t);
+                threads.add(thread);
+            }
+            start += s;
+        }
+        for (final Thread thread : threads) {
+            thread.start();
+        }
+        for (final Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
-    }
-    @Override
-    public void run() {
-        try {
-            this.nhap();
-            this.HienthiSongto(a,b);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for (final Task task : tasks) {
+            list.addAll(task.arrayList);
         }
-
-        System.out.println("ending in processing,......");
-
+        Collections.sort(list);
+        FileWriter fw = new FileWriter("out.txt");
+        for (int i : list) {
+            fw.write(String.valueOf(i) + "\n");
+        }
+        fw.close();
     }
 
-    public static void main(String[] args) throws Exception {
-        Bai4 main = new Bai4();
-        Thread thread = new Thread(main);
-        thread.start();
 
-    }
 }
