@@ -10,7 +10,7 @@ public class Bai1 {
             xuat_All xuat = new xuat_All();
             soChan sc = new soChan();
             ASCII a =new ASCII();
-            a.run();
+
             while (true) {
                 if(Bai1.n!=0)
                 {
@@ -18,6 +18,8 @@ public class Bai1 {
                     sl.run();
                     sc.run();
                     xuat.run();
+                    a.run();
+
                 }
                 System.out.println("Luồng chính đang chờ kết quả");
                 Thread.sleep(5000);
@@ -64,7 +66,6 @@ class soLe extends Thread {
     public void run() {
         while (true) {
             if (Bai1.n != 0) {
-                System.out.println("Các số lẻ nhỏ hơn N là: ");
                 for (int i = 1; i < Bai1.n; i = i + 2) {
                     System.out.println("Số lẻ: " + i + " ");
                 }
@@ -92,7 +93,6 @@ class soChan extends Thread {
     public void run() {
         while (1 > 0) {
             if (Bai1.n != 0) {
-                System.out.println("Các số chẵn nhỏ hơn N là: ");
                 for (int i=0;i<Bai1.n;i=i+2)
                 {
                     System.out.println("Số chẵn: " + i + " ");
@@ -122,7 +122,6 @@ class xuat_All extends Thread {
     public void run() {
         while (1 > 0) {
             if (Bai1.n != 0) {
-                System.out.println("Các số từ 1 đến N là: ");
                 for (int i=1;i<=Bai1.n;i++)
                 {
                     System.out.println("Số từ 1 tới n: " + i + " ");
@@ -133,7 +132,7 @@ class xuat_All extends Thread {
             } else {
                 try {
                     System.out.println();
-                    System.out.println("Luồng in ra các số nhỏ hơn N đang chờ số liệu");
+                    System.out.println("Luồng in ra các số từ 1 tới N đang chờ số liệu");
                     Thread.sleep(5000);
                 } catch (Exception e) {
                     System.out.println("Error " + e);
