@@ -1,17 +1,12 @@
-package com.company;
-
-import java.lang.reflect.Array;
-
 public class Bai5 {
-
-
+    
     public static int sum = 0;
 
     public static void main(String[] args) throws Exception {
 
-    nguyento nt =new nguyento();
-    nt.display(100);
-        System.out.println("tong cac so nguyen to la: "+sum);
+        nguyento nt =new nguyento();
+        nt.display(100);
+        System.out.println("Tong cac so nguyen to la: "+sum);
 
     }
 
@@ -24,13 +19,10 @@ public class Bai5 {
 }
 class nguyento {
     synchronized void display(int n) throws InterruptedException {
-        System.out.println("Cac so nguyen to nho hon 1000: ");
         tong l1 = new tong();
         for (int i = 2; i < n; i++)
             if (Bai5.check(i) == true) {
-
-                System.out.print(i+" ");
-                Thread.sleep(500);
+                System.out.println("So nguyen to: " + i);
                 l1.run(i);
 
             }
@@ -41,14 +33,12 @@ class nguyento {
 }
 
 class tong extends Thread {
-        tong() {
+    tong() {
 
-            start();
-        }
-        public  void run( int x) {
-            Bai5.sum+=x;
-            System.out.println("tong:  "+Bai5.sum);
-        }
+        start();
     }
-
-
+    public void run( int x) {
+        Bai5.sum+=x;
+        System.out.println("Tong: " + Bai5.sum);
+    }
+}
