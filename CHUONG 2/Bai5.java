@@ -11,7 +11,7 @@ public class Bai5 {
 
     nguyento nt =new nguyento();
     nt.display(100);
-        System.out.println(" tong cac so nguyen to la: "+sum);
+        System.out.println("tong cac so nguyen to la: "+sum);
 
     }
 
@@ -28,7 +28,9 @@ class nguyento {
         tong l1 = new tong();
         for (int i = 2; i < n; i++)
             if (Bai5.check(i) == true) {
-                System.out.println(i);
+
+                System.out.print(i+" ");
+                Thread.sleep(500);
                 l1.run(i);
 
             }
@@ -45,7 +47,7 @@ class tong extends Thread {
         }
         public  void run( int x) {
             Bai5.sum+=x;
-
+            System.out.println("tong:  "+Bai5.sum);
         }
     }
 
