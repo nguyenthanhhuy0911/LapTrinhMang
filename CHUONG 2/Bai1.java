@@ -49,6 +49,7 @@ class Nhap1 extends Thread {
 
                 System.out.println("Error" + e);
             }
+            
             if(Bai1.n!=0) break;
         }
     }
