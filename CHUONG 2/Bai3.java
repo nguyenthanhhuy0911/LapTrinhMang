@@ -1,4 +1,4 @@
-import java.util.Random;
+﻿import java.util.Random;
 
 public class Bai3 {
     public static int n;
@@ -10,8 +10,6 @@ public class Bai3 {
         TinhBP  dt = new TinhBP();
         int dem = 0;
         while (1 > 0) {
-
-
             if (Bai3.n != 0) {
                 nh.run();
                 dt.run();
@@ -41,7 +39,7 @@ class Nhap3 extends Thread {
 
                 Bai3.n = rand.nextInt(20);
 
-                System.out.println(Bai3.n);
+                System.out.println("Số ngẫu nhiên: " + Bai3.n);
 
             } catch (Exception e) {
                 System.out.println("Error" + e);
