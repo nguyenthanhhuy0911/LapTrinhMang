@@ -31,6 +31,7 @@ public class Bai5 {
                 e.printStackTrace();
             }
         }
+        
         ten="https://" + ten;
         if (check){
             System.out.println("Noi dung: ");
