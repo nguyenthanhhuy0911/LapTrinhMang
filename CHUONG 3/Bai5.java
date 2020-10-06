@@ -1,52 +1,126 @@
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.net.InetAddress;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Bai5 {
+class DiaChi {
+    private String name;
+    private String ip;
 
-    public static void main(String arg[]) throws IOException {
-        Scanner nhap = new Scanner(System.in);
-        System.out.print("Nhap hostname: ");
-        String ten = nhap.nextLine();
-        boolean check = true;
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader("src/banned.txt"));
+    public DiaChi(String name, String ip) {
+        this.name = name;
+        this.ip = ip;
+    }
 
-            String textInALine;
+    public String print() {
+        return this.name + "  " + this.ip;
+    }
 
-            while ((textInALine = br.readLine()) != null) {
-                if (ten.equals(textInALine)){
-                    System.out.println("Day la trang web trong danh sach cam");
-                    check = false;
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                br.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        ten="https://" + ten;
-        if (check){
-            System.out.println("Noi dung: ");
-            int i;
-            InputStream a;
-            try {
-                URL u = new URL(ten);
-                a = (InputStream)u.getContent();
-                while((i=a.read())>0)
-                    System.out.print((char)i);
-                System.out.println();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public String getName() {
+        return name;
+    }
+
+    public String getIp() {
+        return ip;
     }
 }
 
+class TrinhDuyet {
+    private final String denyFilename = "deny.txt";
+    private ArrayList<DiaChi> denyList = new ArrayList<>();
+
+    public TrinhDuyet() {
+        this.read();
+    }
+
+    private void read() {
+        try {
+            Scanner scanner = new Scanner(new File(denyFilename));
+            while (scanner.hasNextLine()) {
+                String l = scanner.nextLine();
+                if (!l.isEmpty()) {
+                    String[] s = l.split(" ");
+                    DiaChi d = new DiaChi(s[0], s[1]);
+                    this.denyList.add(d);
+                }
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("khong doc duoc file history");
+        }
+    }
+
+    public void write() {
+        try {
+            java.io.File output = new java.io.File(denyFilename);
+            FileWriter writer = new FileWriter(output);
+            if (this.denyList != null) {
+                for (DiaChi d : this.denyList) {
+                    writer.append(d.print());
+                    writer.append("\n");
+                }
+            }
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            System.out.println("Khong the write history vao file");
+            System.out.println(e.getLocalizedMessage());
+        }
+
+    }
+
+    private String formatAddress(String s) {
+        // vnexpress.net => http://vnexpress.net
+        if (!s.startsWith("http://") && !s.startsWith("https://")) {
+            return "http://" + s;
+        }
+        return s;
+    }
+
+    boolean isBlockedAddress(String hostname, String ip) {
+        for (DiaChi d : denyList) {
+            if (d.getIp().equals(ip) || d.getName().equals(hostname)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void go(String address) {
+        // kiem tra xem thu trong danh sach deny list neu ton tai thi thong bao
+        try {
+            URL url = new URL(this.formatAddress(address));
+            String hostname = url.getHost();
+            // lấy dia chi ip
+            InetAddress add = InetAddress.getByName(hostname);
+            String ip = add.getHostAddress();
+            System.out.println(ip);
+            if (this.isBlockedAddress(hostname, ip)) {
+                System.out.println("Địa chỉ trang web của bạn đã bị cấm!");
+                return;
+            }
+            Scanner sc = new Scanner(url.openStream());
+            StringBuffer sb = new StringBuffer();
+            while (sc.hasNext()) {
+                sb.append(sc.next());
+            }
+            // hiển thị nội dung trang web
+            System.out.println(sb.toString());
+
+        } catch (Exception e) {
+            System.out.println("Không thể truy cập được vào trang web này");
+        }
+
+    }
+}
+
+public class Bai5 {
+
+    public static void main(String[] args) {
+        TrinhDuyet t = new TrinhDuyet();
+        t.go("172.217.31.238");
+    }
+}
