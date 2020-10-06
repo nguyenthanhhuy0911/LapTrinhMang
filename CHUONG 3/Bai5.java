@@ -53,24 +53,24 @@ class TrinhDuyet {
         }
     }
 
-    public void write() {
-        try {
-            java.io.File output = new java.io.File(denyFilename);
-            FileWriter writer = new FileWriter(output);
-            if (this.denyList != null) {
-                for (DiaChi d : this.denyList) {
-                    writer.append(d.print());
-                    writer.append("\n");
-                }
-            }
-            writer.flush();
-            writer.close();
-        } catch (Exception e) {
-            System.out.println("Khong the write history vao file");
-            System.out.println(e.getLocalizedMessage());
-        }
+//     public void write() {
+//         try {
+//             java.io.File output = new java.io.File(denyFilename);
+//             FileWriter writer = new FileWriter(output);
+//             if (this.denyList != null) {
+//                 for (DiaChi d : this.denyList) {
+//                     writer.append(d.print());
+//                     writer.append("\n");
+//                 }
+//             }
+//             writer.flush();
+//             writer.close();
+//         } catch (Exception e) {
+//             System.out.println("Khong the write history vao file");
+//             System.out.println(e.getLocalizedMessage());
+//         }
 
-    }
+//     }
 
     private String formatAddress(String s) {
         // vnexpress.net => http://vnexpress.net
@@ -97,7 +97,7 @@ class TrinhDuyet {
             // lấy dia chi ip
             InetAddress add = InetAddress.getByName(hostname);
             String ip = add.getHostAddress();
-            System.out.println(ip);
+//             System.out.println(ip);
             if (this.isBlockedAddress(hostname, ip)) {
                 System.out.println("Địa chỉ trang web của bạn đã bị cấm!");
                 return;
@@ -120,7 +120,10 @@ class TrinhDuyet {
 public class Bai5 {
 
     public static void main(String[] args) {
+        System.out.print("Nhap dia chi: ");
+        Scanner scanner = new Scanner(System.in);
+        String nhap = scanner.nextLine();
         TrinhDuyet t = new TrinhDuyet();
-        t.go("172.217.31.238");
+        t.go(nhap);
     }
 }
