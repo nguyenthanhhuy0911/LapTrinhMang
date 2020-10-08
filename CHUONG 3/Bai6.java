@@ -43,9 +43,6 @@ class Browser {
         this.readHistoryFromFile();
     }
 
-    /*
-    Doc history tu file dua vao array
-     */
     private void readHistoryFromFile() {
         try {
             Scanner scanner = new Scanner(new File(historyFileName));
@@ -59,16 +56,10 @@ class Browser {
             }
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("khong doc duoc file history");
+            System.out.println("Khong doc duoc file history");
         }
     }
 
-    /**
-     * chuẩn hoá địa chỉ website
-     *
-     * @param address
-     * @return
-     */
     private String formatUrl(String address) {
         if (!address.startsWith("http://") && !address.startsWith("https://")) {
             return "http://" + address;
@@ -91,9 +82,6 @@ class Browser {
         this.writeToFile();
     }
 
-    /**
-     * Luu lich su vao file
-     */
     private void writeToFile() {
         try {
             File output = new File(historyFileName);
@@ -121,13 +109,6 @@ class Browser {
     public History go(String address) {
         try {
             URL url = new URL(this.formatUrl(address));
-            Scanner sc = new Scanner(url.openStream());
-            StringBuffer sb = new StringBuffer();
-            while (sc.hasNext()) {
-                sb.append(sc.next());
-            }
-            // hiển thị nội dung trang web
-            System.out.println(sb.toString());
             String hostname = url.getHost();
             // lấy dia chi ip
             InetAddress add = InetAddress.getByName(hostname);
@@ -150,12 +131,12 @@ class Browser {
 
 class Menu {
     public void render() {
-        System.out.println("--------------Trinh duyet UED----------------------");
-        System.out.println("H: xem lich su truy cap");
+        System.out.println("-------------- Menu ----------------------");
+        System.out.println("H: Xem lich su truy cap");
         System.out.println("N: Truy cap trang web moi");
         System.out.println("W: Thoat");
         System.out.println("------------------------------------------------");
-        System.out.print("Nhap vao command:");
+        System.out.print("Nhap vao command: ");
     }
 }
 
@@ -169,24 +150,24 @@ public class Bai6 {
             String cmd = scanner.nextLine().toLowerCase();
             switch (cmd) {
                 case "h":
-                    System.out.println("Lich su truy cap:");
+                    System.out.println("Lich su truy cap: ");
                     browser.printHistories();
                     menu.render();
                     break;
 
                 case "w":
-                    System.out.println("Good bye!, cam on vi da dung UED browser");
+                    System.out.println("Good bye!");
                     System.exit(1);
                     break;
 
                 case "n":
-                    System.out.print("nhap vao dia chi website:");
+                    System.out.print("Nhap vao dia chi website: ");
                     String address = scanner.nextLine();
                     browser.go(address);
                     menu.render();
                     break;
                 default:
-                    System.out.println("yeu cau cua ban khong co trong danh sach");
+                    System.out.println("Yeu cau cua ban khong co trong danh sach");
                     break;
             }
         }
