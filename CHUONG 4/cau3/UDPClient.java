@@ -14,7 +14,7 @@ public class UDPClient {
             DatagramSocket socket = new DatagramSocket();
 
             // init call
-            byte[] callData = "call".getBytes();
+            byte[] callData = "__call__".getBytes();
             DatagramPacket initCallRequest = new DatagramPacket(callData, callData.length, address, port);
             socket.send(initCallRequest);
 

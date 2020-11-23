@@ -31,7 +31,7 @@ public class UDPServer {
                     DatagramPacket request = new DatagramPacket(new byte[255], 255);
                     socket.receive(request);
                     String message = new String(request.getData(), 0, request.getLength());
-                    if(!message.equals("call")){
+                    if(!message.equals("__call__")){
                         System.out.println("Client says: " + message);
                     }else{
                         InetAddress clientAddress = request.getAddress();
