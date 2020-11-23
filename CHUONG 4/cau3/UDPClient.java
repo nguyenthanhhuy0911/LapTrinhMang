@@ -12,6 +12,12 @@ public class UDPClient {
         try {
             InetAddress address = InetAddress.getByName(hostname);
             DatagramSocket socket = new DatagramSocket();
+
+            // init call
+            byte[] callData = "call".getBytes();
+            DatagramPacket initCallRequest = new DatagramPacket(callData, callData.length, address, port);
+            socket.send(initCallRequest);
+
             Thread receiveThread = new Thread(() -> {
                 while (true) {
                     try {

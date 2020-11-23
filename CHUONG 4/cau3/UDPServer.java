@@ -31,12 +31,15 @@ public class UDPServer {
                     DatagramPacket request = new DatagramPacket(new byte[255], 255);
                     socket.receive(request);
                     String message = new String(request.getData(), 0, request.getLength());
-                    System.out.println("Client says: " + message);
+                    if(!message.equals("call")){
+                        System.out.println("Client says: " + message);
+                    }else{
+                        InetAddress clientAddress = request.getAddress();
+                        int clientPort = request.getPort();
+                        Client c = new Client(clientAddress, clientPort);
+                        clients.add(c);
+                    }
 
-                    InetAddress clientAddress = request.getAddress();
-                    int clientPort = request.getPort();
-                    Client c = new Client(clientAddress, clientPort);
-                    clients.add(c);
                 } catch (IOException e) {
                     System.out.println("IO error: " + e.getMessage());
                 }
