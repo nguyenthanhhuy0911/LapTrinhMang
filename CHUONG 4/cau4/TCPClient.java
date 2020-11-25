@@ -1,18 +1,13 @@
-package cau4.src;
-
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.io.*;
+import java.net.Socket;
 import java.util.Scanner;
 
-public class UDPClient {
+public class TCPClient {
     private String hostname;
     private int port;
-    private DatagramSocket socket;
-    private InetAddress address;
+    private Socket socket;
 
-    public UDPClient(String hostname, int port) {
+    public TCPClient(String hostname, int port) {
         this.hostname = hostname;
         this.port = port;
 
@@ -31,14 +26,14 @@ public class UDPClient {
                 username = scanner.nextLine();
                 System.out.println("Enter password:");
                 password = scanner.nextLine();
-                this.send("login\n" + username + "\n" + password);
+                this.send("login__" + username + "__" + password);
                 break;
             case "2":
                 System.out.println("Enter username:");
                 username = scanner.nextLine();
                 System.out.println("Enter password:");
                 password = scanner.nextLine();
-                this.send("create\n" + username + "\n" + password);
+                this.send("create__" + username + "__" + password);
                 break;
             default:
                 break;
@@ -49,36 +44,44 @@ public class UDPClient {
     private void run() {
         System.out.println("Welcome to UED system: Enter command bellow!");
         try {
-            address = InetAddress.getByName(hostname);
-            socket = new DatagramSocket();
-            while (true) {
-                menu();
-                byte[] incomingBuffer = new byte[255];
-                DatagramPacket response = new DatagramPacket(incomingBuffer, incomingBuffer.length);
-                socket.receive(response);
-                String receiveMessage = new String(incomingBuffer, 0, response.getLength());
-                System.out.println("Server response: " + receiveMessage);
-            }
-
-
+            socket = new Socket(hostname, port);
         } catch (IOException ex) {
             System.out.println("Client error: " + ex.getMessage());
-            ex.printStackTrace();
         }
+        Thread t1 = new Thread(() -> {
+            while (true) {
+                menu();
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            try {
+               while (true){
+                   InputStream input = socket.getInputStream();
+                   BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                   String msg = reader.readLine();
+                   System.out.println("Server replies: " + msg);
+               }
+            } catch (IOException e) {
+                System.out.println("IO Error: " + e.getMessage());
+            }
+        });
+        t1.start();
+        t2.start();
     }
 
     private void send(String msg) {
         try {
-            byte[] callData = msg.getBytes();
-            DatagramPacket req = new DatagramPacket(callData, callData.length, address, port);
-            socket.send(req);
+            OutputStream output = socket.getOutputStream();
+            PrintWriter writer = new PrintWriter(output, true);
+            writer.println(msg);
         } catch (IOException e) {
-            System.out.println("Error sending message: " + e.getMessage());
+            System.out.println("Send error: " + e.getMessage());
         }
     }
 
     public static void main(String[] args) {
-        UDPClient client = new UDPClient("127.0.0.1", 8080);
+        TCPClient client = new TCPClient("127.0.0.1", 8080);
         client.run();
     }
 }
