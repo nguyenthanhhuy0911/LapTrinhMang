@@ -50,7 +50,27 @@ public class SongSongTCP_Sever {
         public RequestProcessing(Socket s) {
             skc = s;
         }
+        public  float  cong(float a,float b)
+        {
 
+            return a+b;
+        }
+        public float chia(float a,float b)
+        {
+
+
+            return a/b;
+        }
+        public float tru(float a,float b)
+        {
+
+
+            return a-b;
+        }
+        public float nhan(float a,float b)
+        {
+            return a*b ;
+        }
         public void run() {
             try {
                 DataOutputStream opstr = new DataOutputStream(skc.getOutputStream());
@@ -68,20 +88,70 @@ public class SongSongTCP_Sever {
                         System.out.println();
                         break;
                     }
-                    ScriptEngineManager mgr = new ScriptEngineManager();
-                    ScriptEngine engine = mgr.getEngineByName("JavaScript");
+
+//                    ScriptEngineManager mgr = new ScriptEngineManager();
+//                    ScriptEngine engine = mgr.getEngineByName("JavaScript");
+                    float result = 0;
+                    String note="";
+                    int check=0;
+                    String[] xau=str.split(" ");
+
+                   if(xau[0].equals("*")==true)
+                   {
+                       result =nhan(Float.parseFloat( xau[1]),Float.parseFloat(xau[2]));
+                       System.out.println("ok");
+                   }
+
+                   else if(xau[0].equals("/")==true)
+                    {
+                        if(xau[2].equals("0")==true)
+                        {
+
+                            note=" tu so khong the bang 0";
+                            result = chia(Float.parseFloat(xau[1]), Float.parseFloat(xau[2]));
+
+                        }
+                        else {
+                            result = chia(Float.parseFloat(xau[1]), Float.parseFloat(xau[2]));
+                        }
+
+                    }
+
+                    else if(xau[0].equals("+")==true)
+                    {
+                        result =cong(Float.parseFloat( xau[1]),Float.parseFloat(xau[2]));
+
+                    }
+
+                    else if(xau[0].equals("-")==true)
+                    {
+                        result =tru(Float.parseFloat( xau[1]),Float.parseFloat(xau[2]));
+
+                    }
+                    else
+                   {
+                           note="sai dinh dang:( [+,-,*,/] so1 so1 ) vi du: * 9 8 <=> 9*8";
+                           check=1;
+                   }
 
 
+                    if(check==1)
+                    {
+                        opstr.writeBytes(note);
+                        check=0;
+                    }
+                    else {
+                        opstr.writeBytes(String.valueOf(result)+note);
 
-                    int strHoa = (int) engine.eval(str);
-                    opstr.writeBytes(String.valueOf(strHoa));
+                    }
+
                     opstr.write(13);
                     opstr.write(10);
                     opstr.flush();
-                    System.out.println("Server da goi tra loi " + strHoa + " cho Client[" + clientNo + "]");
+                    System.out.println("Server da goi tra loi " + result + " cho Client[" + clientNo + "]");
                 }
                 skc.close();
-            } catch (IOException | ScriptException e) {
+            } catch (IOException  e) {
                 System.out.println("Connection Error: " + e);
             }
         }

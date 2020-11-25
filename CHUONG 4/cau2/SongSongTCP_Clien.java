@@ -29,6 +29,7 @@ public class SongSongTCP_Clien {
 //                System.out.println("Client dang goi message thu " + messageNo + " cho Server!");
 //                messageNo++;
                 str = ipstr.readLine();
+
                 System.out.println("Ket qua cua Phep Tinh: " + str );
                 if (str.equals("quit")) break;
             }

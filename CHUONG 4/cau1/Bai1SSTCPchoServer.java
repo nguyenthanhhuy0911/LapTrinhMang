@@ -1,3 +1,5 @@
+package cau1;
+
 import java.io.*;
 import java.net.*;
 
@@ -59,6 +61,34 @@ public class Bai1SSTCPchoServer {
                         break;
                     }
                     String res = "";
+
+           String[][] gt =new String[10][10];
+
+
+
+                    gt[1][0]="tỷ";
+                    gt[1][1]="trăm";
+                    gt[1][2]="muơi";
+                    gt[1][3]="triệu";
+                    gt[1][4]="trăm";
+                    gt[1][5]="muoi";
+                    gt[1][6]="ngàn";
+                    gt[1][7]="trăm";
+                    gt[1][8]="mươi";
+                    gt[1][9]="đồng";
+for(int i=0;i<2;i++)
+{
+    for(int j=0;j<10;j++)
+    {
+        System.out.print(gt[i][j]+" ");
+    }
+    System.out.println();
+}
+
+String so = str;
+
+
+
                     // Kiem tra phai so hay khong
                     int x = 0;
                     for (int i = 0; i < str.length(); i++)
