@@ -10,22 +10,23 @@ public class Bai1SSTCPchoServer {
 
     public static void main(String[] args) {
         try {
-            ServerSocket ss = new ServerSocket(defaultPort);
+            ServerSocket ss = new ServerSocket(defaultPort); // khởi tạo socket server để đón nhận client
             while (true) {
                 try {
                     System.out.println("Server dang hoat dong!");
                     System.out.println("----------------------------------");
-                    Socket s = ss.accept();
-                    clientNo++;
+                    Socket s = ss.accept(); //khi có client thì nhận client 
+                    clientNo++; // tăng client number lên 1 đơn vị 
                     System.out.println("----------------------------------");
                     System.out.println("Khoi dong luong cho Client [" + clientNo + "]");
-                    RequestProcessing rp = new RequestProcessing(s);
-                    rp.start();
-                    rp.clientNo = clientNo;
-                    Bai1SSTCPchoServer.clientOnline++;
+                    RequestProcessing rp = new RequestProcessing(s); // khởi tạo 1 luồng xử riêng đối với mỗi client
+                    rp.start(); // chạy luồng vừa được khởi tạo ở trên
+                    rp.clientNo = clientNo; // set client number vao luòng 
+                    Bai1SSTCPchoServer.clientOnline++; // tăng số lượng client đang online lên 1 đơn vị 
                     System.out.println("So client online hien tai la: " + Bai1SSTCPchoServer.clientOnline);
                     System.out.println("----------------------------------");
                 } catch (IOException e) {
+                   
                     System.out.println("Connection Error" + e);
                 }
             }
@@ -34,16 +35,17 @@ public class Bai1SSTCPchoServer {
         }
     }
 
+    // class này là luồng xử lý cho mỗi client 
     static class RequestProcessing extends Thread {
         Socket skc;
-        public int messageNo = 1;
-        public int clientNo = 0;
-        int n = 0;
-        static String st = "";
-        static int[] c = new int[10];
+        public int messageNo = 1; // khởi tạo biến đếm số thứ tự của message client gửi tới
+        public int clientNo = 0;  // số thứ tự của client đang online 
+        int n = 0; // biến lưu số mà sau khi đã convert từ string str của client gửi qua
+        static String st = ""; //biến gán vào kết quả 
+        static int[] c = new int[10]; // khởi tạo mảng để lưu các kí tự số sau khi tách từ n eg: 100 - > 1,0,0 
         static String[] mau = new String[]{"khong ", "mot ", "hai ", "ba ", "bon ",
-                "nam ", "sau ", "bay ", "tam ", "chin "};
-        static void get(int vt){
+                "nam ", "sau ", "bay ", "tam ", "chin "}; 
+        static void get(int vt){ // thuật toán chuyển vị trí qua chữ 1 234 567 
             if (vt == 7) return;
             switch (vt)
             {
@@ -70,21 +72,22 @@ public class Bai1SSTCPchoServer {
                 break;
             }
         }
-
+         // khởi tạo class với socket client là tham số 
         public RequestProcessing(Socket s) {
             skc = s;
         }
 
+        // chạy luồng của class này 
         public void run() {
             try {
                 DataOutputStream opstr = new DataOutputStream(skc.getOutputStream());
                 BufferedReader ipstr = new BufferedReader(new InputStreamReader(skc.getInputStream()));
-                while (true) {
+                while (true) { // lặp lại 
                     System.out.println();
-                    String str = ipstr.readLine();
-                    System.out.println("Client[" + clientNo + "]" + " doi Message thu " + messageNo);
-                    messageNo++;
-                    if (str.equals("quit")) {
+                    String str = ipstr.readLine(); // đọc message từ client gửi về server 
+                    System.out.println("Client[" + clientNo + "]" + " doi Message thu " + messageNo); // in ra thông tin 
+                    messageNo++; // tăng số lượng message client lên 1 
+                    if (str.equals("quit")) { // nếu message nhận được là "quit" thì sẽ thông báo ra là disconnected và thoát vòng lặp
                         opstr.writeBytes(str);
                         System.out.println("Client[" + clientNo + "]" + " is Disconnected");
                         Bai1SSTCPchoServer.clientOnline--;
@@ -92,10 +95,11 @@ public class Bai1SSTCPchoServer {
                         System.out.println();
                         break;
                     }
-                    st = "";
+                    st = ""; // gán kết quả trả về là string rỗng 
                     // Kiem tra phai so hay khong
-                    n = 0;
+                    n = 0; // là số cần chuyển từ string sang number  có thể dùng gọn hơn   int i=Integer.parseInt("200");  
                     boolean check = true;
+                    // hàm kiểm tra chuổi str có phải số từ 0-9 hay khong 
                     for (int i = 0; i < str.length(); i++)
                         if (!(str.charAt(i) >= '0' && str.charAt(i) <= '9')) {
                             st = "Khong phai so nguyen";
@@ -107,6 +111,8 @@ public class Bai1SSTCPchoServer {
                         int i;
                         for (i = 1; i <= 7; i++)
                             c[i] = 0;
+                        // thuât toán tách các số từ 1 chuổi , và gán ngược lại mảng theo thứ tự từ trái sang , 
+                        // chú ý tách là tách từ phải qua trái (tức là hàng đơn vị quả hàng chục ..
                         i = 7;
                         while (n != 0)
                         {
