@@ -107,7 +107,7 @@ public class SongSongTCP_Sever {
                         if(xau[2].equals("0")==true)
                         {
 
-                            note=" tu so khong the bang 0";
+                            note=" mau so khong the bang 0";
                             result = chia(Float.parseFloat(xau[1]), Float.parseFloat(xau[2]));
 
                         }
